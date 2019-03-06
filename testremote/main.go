@@ -1,9 +1,9 @@
-package libpowershell;
+package main;
 
 import(
 	    "fmt"
             "strings"
-            "github.com/libpowershell/libremotepowershell"
+            "github.com/libpowershell/libwmi"
 	)
 
 

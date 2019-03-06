@@ -7,12 +7,6 @@ import(
 	)
 
 
-//func main(){
-//  thever := GetWinVersion();
-	fmt.Printf("Windows Version = %s\n",thever);
-//  check_windows_prereq();
-//}
-
 func PsReset(){
 	fmt.Printf("Reseting\n");
 }

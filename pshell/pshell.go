@@ -1,4 +1,4 @@
-package libpowershell
+package pshell
 
 import(
 	    "fmt"

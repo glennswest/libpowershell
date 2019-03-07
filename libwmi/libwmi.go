@@ -14,7 +14,7 @@ func WmiGetWinVersion(host string,user string,password string) string {
 // Major  Minor  Build  Revision
 // -----  -----  -----  --------
 // 10     0      17134  0
-	result := WmiPowershell(host,user,password,"[System.Environment]::OSVersion.Version");
+	result := WmiPowershell(host,user,password,"powershell [System.Environment]::OSVersion.Version");
         thelines := lines(result);
 
 	verstr := standardizeSpaces(thelines[3]);
@@ -39,7 +39,7 @@ func WmiPowershell(host,user,password,thecmd string) string {
         r, w, _ := os.Pipe()
 
         log.Printf("Starting new endpoint\n")
-        endpoint := winrm.NewEndpoint(host, 5986, false, false, nil, nil, nil, 0)
+        endpoint := winrm.NewEndpoint(host, 5985, false, false, nil, nil, nil, 0)
         log.Printf("WmiPowershell: Finished NewEndpoint\n")
 	client, err := winrm.NewClient(endpoint, user, password)
         log.Printf("WmiPowershell: Finished Newclient\n")
@@ -50,8 +50,7 @@ func WmiPowershell(host,user,password,thecmd string) string {
 	    }
 
         log.Printf("WmiPowerShell: Starting client.Run\n")
-	//client.Run(thecmd, w, w)
-	client.Run(thecmd, os.Stdout, os.Stdout)
+	client.Run(thecmd, w, w)
         w.Close()
         out, _ := ioutil.ReadAll(r)
         result := string(out)

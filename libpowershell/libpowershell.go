@@ -4,8 +4,35 @@ import(
 	    "fmt"
 	    "os/exec"
             "strings"
+            "github.com/masterzen/winrm"
+            "io/ioutil"
+            "os"
+            "log"
 	)
 
+
+var Mode string
+var User string
+var Password string
+var Host string
+
+func init(){
+     SetLocalMode()
+}
+
+func SetLocalMode(){
+     Mode = "local"
+     User = ""
+     Password = ""
+     Host = ""
+}
+
+func SetRemoteMode(thehostname string,theusername string, thepassword string){
+     Mode = "remote"
+     Host = thehostname
+     User = theusername
+     Password = thepassword
+}
 
 func PsReset(){
 	fmt.Printf("Reseting\n");
@@ -71,6 +98,19 @@ func standardizeSpaces(s string) string {
 }
 
 func Powershell(thecmd string) string {
+      switch Mode {
+          case "local":
+               result := LocalPowershell(thecmd)
+               return(result)
+          case "remote":
+               result := WmiPowershell(Host,User,Password,thecmd)
+               return(result)
+          }
+      return("Error")
+}
+
+
+func LocalPowershell(thecmd string) string {
 	theargs := strings.Split(thecmd," ");
 	c,err := exec.Command("powershell", theargs...).CombinedOutput();
 	cmd := string(c);
@@ -80,4 +120,28 @@ func Powershell(thecmd string) string {
     } else {
 	    return(cmd);
     }
+}
+
+func WmiPowershell(host,user,password,thecmd string) string {
+        log.Printf("WmiPowershell: %s - %s - %s - %s\n",host,user,password,thecmd)
+        r, w, _ := os.Pipe()
+
+        log.Printf("Starting new endpoint\n")
+        endpoint := winrm.NewEndpoint(host, 5985, false, false, nil, nil, nil, 0)
+        log.Printf("WmiPowershell: Finished NewEndpoint\n")
+        client, err := winrm.NewClient(endpoint, user, password)
+        log.Printf("WmiPowershell: Finished Newclient\n")
+
+        if err != nil {
+            log.Printf("WmiPowerShell: %s) %s - Failed - %s\n",host,thecmd,err.Error())
+            return(err.Error())
+            }
+
+        log.Printf("WmiPowerShell: Starting client.Run\n")
+        client.Run(thecmd, w, w)
+        w.Close()
+        out, _ := ioutil.ReadAll(r)
+        result := string(out)
+       log.Printf("%s\n",result)
+       return result
 }

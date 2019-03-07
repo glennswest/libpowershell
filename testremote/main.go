@@ -8,7 +8,7 @@ import(
 
 func main(){
   host := "winnode01"
-  username := "Adminisrator"
+  username := "Administrator"
   password := "Secret2018"
   thever := libwmi.WmiGetWinVersion(host,username,password)
   fmt.Printf("Windows Version = %s\n",thever)

@@ -2,15 +2,14 @@ package main;
 
 import(
 	    "fmt"
-            "github.com/glennswest/libpowershell/libwmi"
+            "github.com/glennswest/libpowershell/libpowershell"
 	)
 
 
 func main(){
   host := "winnode01"
-  username := "Administrator"
-  password := "Secret2018"
-  thever := libwmi.WmiGetWinVersion(host,username,password)
+  SetRemoteMode(host,"Administrator","Secret2018")
+  
   fmt.Printf("Windows Version = %s\n",thever)
 }
 

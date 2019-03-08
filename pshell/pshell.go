@@ -103,7 +103,8 @@ func Powershell(thecmd string) string {
                result := LocalPowershell(thecmd)
                return(result)
           case "remote":
-               result := WmiPowershell(Host,User,Password,thecmd)
+               rcmd := "powershell " + thecmd
+               result := WmiPowershell(Host,User,Password,rcmd)
                return(result)
           }
       return("Error")
@@ -123,25 +124,18 @@ func LocalPowershell(thecmd string) string {
 }
 
 func WmiPowershell(host,user,password,thecmd string) string {
-        log.Printf("WmiPowershell: %s - %s - %s - %s\n",host,user,password,thecmd)
         r, w, _ := os.Pipe()
 
-        log.Printf("Starting new endpoint\n")
         endpoint := winrm.NewEndpoint(host, 5985, false, false, nil, nil, nil, 0)
-        log.Printf("WmiPowershell: Finished NewEndpoint\n")
         client, err := winrm.NewClient(endpoint, user, password)
-        log.Printf("WmiPowershell: Finished Newclient\n")
 
         if err != nil {
-            log.Printf("WmiPowerShell: %s) %s - Failed - %s\n",host,thecmd,err.Error())
             return(err.Error())
             }
 
-        log.Printf("WmiPowerShell: Starting client.Run\n")
         client.Run(thecmd, w, w)
         w.Close()
         out, _ := ioutil.ReadAll(r)
         result := string(out)
-       log.Printf("%s\n",result)
        return result
 }

@@ -7,7 +7,6 @@ import(
             "github.com/masterzen/winrm"
             "io/ioutil"
             "os"
-            "log"
 	)
 
 

@@ -78,7 +78,10 @@ func GetWinVersion() string {
 // -----  -----  -----  --------
 // 10     0      17134  0
 	result := Powershell("[System.Environment]::OSVersion.Version");
-  thelines := lines(result);
+        thelines := lines(result);
+        if (len(thelines) < 3){
+           return ""
+           }
 
 	verstr := standardizeSpaces(thelines[3]);
 	va := strings.Split(verstr," ");

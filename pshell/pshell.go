@@ -85,7 +85,7 @@ func GetWinVersion() string {
 
 	verstr := standardizeSpaces(thelines[3]);
 	va := strings.Split(verstr," ");
-	ver := va[0] + "." + va[1] + "." + va[2] + "." + va[3];
+	ver := va[0] + "." + va[1] + "." + va[2]
 	return(ver);
 }
 

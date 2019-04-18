@@ -6,6 +6,7 @@ import(
             "strings"
             "github.com/masterzen/winrm"
             "io/ioutil"
+            "log"
             "os"
 	)
 
@@ -102,11 +103,15 @@ func standardizeSpaces(s string) string {
 func Powershell(thecmd string) string {
       switch Mode {
           case "local":
+               log.Printf("PS> %s\n", thecmd)
                result := LocalPowershell(thecmd)
+               log.Printf("%s\n",result)
                return(result)
           case "remote":
                rcmd := "powershell " + thecmd
+               log.Printf("PS> %s\n", thecmd)
                result := WmiPowershell(Host,User,Password,rcmd)
+               log.Printf("%s\n",result)
                return(result)
           }
       return("Error")

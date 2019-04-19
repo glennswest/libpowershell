@@ -12,6 +12,8 @@ func main(){
   
   thever := pshell.GetWinVersion();
   fmt.Printf("Windows Version = %s\n",thever)
+
+  pshell.Powershell("mkdir /Program` Files/WindowsNodeManager")
 }
 
 

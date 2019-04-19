@@ -108,7 +108,7 @@ func Powershell(thecmd string) string {
                log.Printf("%s\n",result)
                return(result)
           case "remote":
-               rcmd := "powershell '" + thecmd + "'"
+               rcmd := "powershell " + thecmd 
                log.Printf("PS> %s\n", thecmd)
                result := WmiPowershell(Host,User,Password,rcmd)
                log.Printf("%s\n",result)

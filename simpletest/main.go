@@ -1,7 +1,7 @@
 package main
 
 import (
-	"t/libpowershell/libpowershell"
+	"github.com/glennswest/libpowershell/pshell"
         "log"
 )
 

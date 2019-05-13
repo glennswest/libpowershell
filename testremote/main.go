@@ -2,6 +2,7 @@ package main;
 
 import(
 	    "fmt"
+            "strings"
             "github.com/glennswest/libpowershell/pshell"
 	)
 
@@ -12,8 +13,13 @@ func main(){
   
   thever := pshell.GetWinVersion();
   fmt.Printf("Windows Version = %s\n",thever)
-
-  pshell.Powershell("mkdir /Program` Files/WindowsNodeManager")
+ 
+  result := pshell.Powershell("Test-Path -Path \"/Program` Files/WindowsNodeManager/winnodeman.exe\"")
+  fmt.Printf("Result = %s\n",result)
+  fmt.Printf("Length = %d\n",len(result))
+  if (strings.Compare(result[0:4],"True") == 0){
+     fmt.Printf("It Really True\n")
+     }
 }
 
 

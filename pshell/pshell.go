@@ -104,7 +104,8 @@ func Powershell(thecmd string) string {
       switch Mode {
           case "local":
                log.Printf("PS> %s\n", thecmd)
-               result := LocalPowershell(thecmd)
+               lcmd := "powershell " + thecmd 
+               result := LocalPowershell(lcmd)
                log.Printf("%s\n",result)
                return(result)
           case "remote":

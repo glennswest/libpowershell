@@ -103,12 +103,8 @@ func standardizeSpaces(s string) string {
 func Powershell(thecmd string) string {
       switch Mode {
           case "local":
-	       thepath :=  "C:/pcmd.ps1"
-	       ioutil.WriteFile(thepath,[]byte(thecmd), 0600)
                log.Printf("PS> %s\n", thecmd)
-               result := LocalPowershell(thepath)
-               log.Printf("%s\n",result)
-	       //os.RemoveAll(thepath)
+               result := LocalPowershell(thecmd)
                return(result)
           case "remote":
                rcmd := "powershell " + thecmd 

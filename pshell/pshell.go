@@ -4,6 +4,7 @@ import(
 	    "fmt"
 	    "os/exec"
             "strings"
+            "strconv"
             "github.com/masterzen/winrm"
             "io/ioutil"
             "log"
@@ -120,6 +121,7 @@ func Powershell(thecmd string) string {
 
 
 func LocalPowershell(thecmd string) string {
+        thecmd = strconv.Quote(thecmd)
 	theargs := strings.Split(thecmd," ");
 	c,err := exec.Command("powershell", theargs...).CombinedOutput();
 	cmd := string(c);

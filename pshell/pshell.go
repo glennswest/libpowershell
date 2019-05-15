@@ -4,7 +4,6 @@ import(
 	    "fmt"
 	    "os/exec"
             "strings"
-            "strconv"
             "github.com/masterzen/winrm"
             "io/ioutil"
             "log"
@@ -104,10 +103,12 @@ func standardizeSpaces(s string) string {
 func Powershell(thecmd string) string {
       switch Mode {
           case "local":
+	       thepath :=  "./pcmd.ps1"
+	       ioutil.WriteFile(thepath,[]byte(thecmd), 0600)
                log.Printf("PS> %s\n", thecmd)
-               lcmd := "powershell " + thecmd 
-               result := LocalPowershell(lcmd)
+               result := LocalPowershell(thecmd)
                log.Printf("%s\n",result)
+	       os.RemoveAll(thepath)
                return(result)
           case "remote":
                rcmd := "powershell " + thecmd 
@@ -121,7 +122,6 @@ func Powershell(thecmd string) string {
 
 
 func LocalPowershell(thecmd string) string {
-        thecmd = strconv.Quote(thecmd)
 	theargs := strings.Split(thecmd," ");
 	c,err := exec.Command("powershell", theargs...).CombinedOutput();
 	cmd := string(c);

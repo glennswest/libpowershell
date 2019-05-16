@@ -5,6 +5,7 @@ import(
 	    "os/exec"
             "strings"
             "github.com/masterzen/winrm"
+            "time"
             "io/ioutil"
             "log"
             "os"
@@ -107,7 +108,8 @@ func Powershell(thecmd string) string {
                result := LocalPowershell(thecmd)
                return(result)
           case "remote":
-               rcmd := "powershell " + thecmd 
+               pc := strings.Replace(thecmd,`"`,`\"`,-1)
+               rcmd := "powershell " + pc
                log.Printf("PS> %s\n", thecmd)
                result := WmiPowershell(Host,User,Password,rcmd)
                log.Printf("%s\n",result)
@@ -132,7 +134,7 @@ func LocalPowershell(thecmd string) string {
 func WmiPowershell(host,user,password,thecmd string) string {
         r, w, _ := os.Pipe()
 
-        endpoint := winrm.NewEndpoint(host, 5985, false, false, nil, nil, nil, 0)
+        endpoint := winrm.NewEndpoint(host, 5985, false, false, nil, nil, nil, (time.Second * 3 * 60))
         client, err := winrm.NewClient(endpoint, user, password)
 
         if err != nil {
@@ -140,7 +142,7 @@ func WmiPowershell(host,user,password,thecmd string) string {
             }
 
         client.Run(thecmd, w, w)
-        w.Close()
+        defer w.Close()
         out, _ := ioutil.ReadAll(r)
         result := string(out)
        return result

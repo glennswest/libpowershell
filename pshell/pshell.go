@@ -141,8 +141,8 @@ func WmiPowershell(host,user,password,thecmd string) string {
             }
 
         client.Run(thecmd, w, w)
-        out, _ := ioutil.ReadAll(r)
         w.Close()
+        out, _ := ioutil.ReadAll(r)
         result := string(out)
        return result
 }

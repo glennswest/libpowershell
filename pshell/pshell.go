@@ -109,7 +109,7 @@ func Powershell(thecmd string) string {
                return(result)
           case "remote":
                pc := strings.Replace(thecmd,`"`,`\"`,-1)
-               rcmd := "powershell " + pc
+               rcmd := "powershell -NonInteractive -ExecutionPolicy Bypass " + pc
                log.Printf("PS> %s\n", thecmd)
                result := WmiPowershell(Host,User,Password,rcmd)
                log.Printf("%s\n",result)
@@ -142,8 +142,9 @@ func WmiPowershell(host,user,password,thecmd string) string {
             }
 
         client.Run(thecmd, w, w)
-        defer w.Close()
+        //defer w.Close()
         out, _ := ioutil.ReadAll(r)
+        w.Close()
         result := string(out)
        return result
 }
